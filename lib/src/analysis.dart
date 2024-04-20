@@ -4,7 +4,7 @@ typedef GraphComponent = List<Node>;
 
 List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
   final List<List<Node>> components = [];
-  final List<Node> visited = [];
+  final Set<Node> visited = {};
 
   void dfs(Node node, List<Node> component) {
     if (visited.contains(node)) {
@@ -38,8 +38,8 @@ List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
 List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
   final List<List<Node>> cycles = [];
   final Map<Node, Node> parentMap = {};
-  final visited = <Node>{};
-  final finished = <Node>{};
+  final Set<Node> visited = {};
+  final Set<Node> finished = {};
 
   void dfs(Node node, List<Node> path) {
     if (visited.contains(node)) {
@@ -88,7 +88,7 @@ List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
 List<TagNode> findLoneTags(Policy policy) {
   final List<TagNode> tags = policy.nodes.whereType<TagNode>().toList();
 
-  final List<Node> visited = [];
+  final Set<Node> visited = {};
 
   void dfs(Node node) {
     if (visited.contains(node)) {
