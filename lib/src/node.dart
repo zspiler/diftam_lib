@@ -12,11 +12,11 @@ enum NodeType {
 }
 
 abstract class Node implements GraphObject {
-  Point position;
+  Point<double> position;
 
-  Node(Point? position) : position = position ?? Point(0, 0);
+  Node(Point<double>? position) : position = position ?? Point(0.0, 0.0);
 
-  factory Node.fromType(NodeType type, String labelOrDescriptor, [Point? position]) {
+  factory Node.fromType(NodeType type, String labelOrDescriptor, [Point<double>? position]) {
     return switch (type) {
       NodeType.tag => TagNode(labelOrDescriptor, position),
       NodeType.entry => EntryNode(labelOrDescriptor, position),
@@ -28,7 +28,7 @@ abstract class Node implements GraphObject {
       : position = Point((json['position']['x']).toDouble(), (json['position']['y']).toDouble());
 
   @override
-  Node copyWith({Point? position});
+  Node copyWith({Point<double>? position});
 
   String get label;
   NodeType get type;
@@ -50,10 +50,10 @@ class TagNode extends Node {
   @override
   String label;
 
-  TagNode(this.label, [Point? position]) : super(position);
+  TagNode(this.label, [Point<double>? position]) : super(position);
 
   @override
-  TagNode copyWith({Point? position, String? label}) {
+  TagNode copyWith({Point<double>? position, String? label}) {
     return TagNode(label ?? this.label, position ?? this.position);
   }
 
@@ -79,7 +79,7 @@ class TagNode extends Node {
 abstract class BoundaryNode extends Node {
   String descriptor;
 
-  BoundaryNode(this.descriptor, [Point? position]) : super(position);
+  BoundaryNode(this.descriptor, [Point<double>? position]) : super(position);
 
   BoundaryNode.fromJson(Map<String, dynamic> json)
       : descriptor = json['descriptor'],
@@ -101,10 +101,10 @@ abstract class BoundaryNode extends Node {
 }
 
 class EntryNode extends BoundaryNode {
-  EntryNode(String descriptor, [Point? position]) : super(descriptor, position);
+  EntryNode(String descriptor, [Point<double>? position]) : super(descriptor, position);
 
   @override
-  EntryNode copyWith({Point? position, String? descriptor}) {
+  EntryNode copyWith({Point<double>? position, String? descriptor}) {
     return EntryNode(descriptor ?? this.descriptor, position ?? this.position);
   }
 
@@ -118,10 +118,10 @@ class EntryNode extends BoundaryNode {
 }
 
 class ExitNode extends BoundaryNode {
-  ExitNode(String descriptor, [Point? position]) : super(descriptor, position);
+  ExitNode(String descriptor, [Point<double>? position]) : super(descriptor, position);
 
   @override
-  ExitNode copyWith({Point? position, String? descriptor}) {
+  ExitNode copyWith({Point<double>? position, String? descriptor}) {
     return ExitNode(descriptor ?? this.descriptor, position ?? this.position);
   }
 
