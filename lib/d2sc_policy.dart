@@ -1,8 +1,9 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
+export 'src/policy.dart';
 
-export 'src/d2sc_policy_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+// TODO trim down exports
+export 'src/edge.dart';
+export 'src/node.dart';
+export 'src/graph_object.dart';
+export 'src/utils.dart';
+export 'src/product.dart';
+export 'src/analysis.dart';
