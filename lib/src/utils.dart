@@ -13,6 +13,15 @@ bool exitNodeWithDescriptorExists(List<Node> nodes, String descriptor) {
   Because we represent two-way edges via two seperate edges we need to find the sibling edge of a given edge.
 */
 Edge? getSiblingEdge(List<Edge> edges, Edge edge) {
+  T? firstOrNull<T>(List<T> list, bool Function(T element) predicate) {
+    final elements = list.where(predicate);
+    if (elements.isEmpty) {
+      return null;
+    } else {
+      return elements.first;
+    }
+  }
+
   return firstOrNull(edges, (e) => e != edge && e.type == edge.type && e.source == edge.target && e.target == edge.source);
 }
 
@@ -46,13 +55,4 @@ List<(T, T)> cartesian<T>(List<T> list1, List<T> list2) {
     }
   }
   return result;
-}
-
-T? firstOrNull<T>(List<T> list, bool Function(T element) predicate) {
-  final elements = list.where(predicate);
-  if (elements.isEmpty) {
-    return null;
-  } else {
-    return elements.first;
-  }
 }
