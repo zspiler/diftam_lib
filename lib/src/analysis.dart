@@ -3,7 +3,6 @@ import 'policy.dart';
 typedef GraphComponent = List<Node>;
 
 List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
-  final List<List<Node>> components = [];
   final Set<Node> visited = {};
 
   void dfs(Node node, List<Node> component) {
@@ -12,18 +11,12 @@ List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
     }
     visited.add(node);
     component.add(node);
-    for (var edge in policy.edges) {
-      if (edge.type == edgeType) {
-        // NOTE: We don't care about the direction of the edge
-        if (edge.source == node) {
-          dfs(edge.target, component);
-        } else if (edge.target == node) {
-          dfs(edge.source, component);
-        }
-      }
+    for (var neighbour in policy.getNeighbours(node, edgeType)) {
+      dfs(neighbour, component);
     }
   }
 
+  final List<List<Node>> components = [];
   for (var node in policy.nodes) {
     if (!visited.contains(node)) {
       List<Node> component = [];
@@ -68,8 +61,7 @@ List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
     visited.add(node);
     path.add(node);
 
-    final neighbours = policy.edges.where((edge) => edge.type == edgeType && edge.source == node).map((edge) => edge.target);
-    for (var neighbour in neighbours) {
+    for (var neighbour in policy.getOutNeighbours(node)) {
       parentMap[neighbour] = node;
       dfs(neighbour, List<Node>.from(path));
     }
@@ -86,8 +78,6 @@ List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
 }
 
 List<TagNode> findLoneTags(Policy policy) {
-  final List<TagNode> tags = policy.nodes.whereType<TagNode>().toList();
-
   final Set<Node> visited = {};
 
   void dfs(Node node) {
@@ -97,8 +87,7 @@ List<TagNode> findLoneTags(Policy policy) {
 
     visited.add(node);
 
-    final neighbours = policy.edges.where((edge) => edge.source == node).map((edge) => edge.target);
-    for (var neighbour in neighbours) {
+    for (var neighbour in policy.getOutNeighbours(node)) {
       dfs(neighbour);
     }
   }
@@ -109,5 +98,5 @@ List<TagNode> findLoneTags(Policy policy) {
     }
   }
 
-  return tags.where((tag) => !visited.contains(tag)).toList();
+  return policy.nodes.whereType<TagNode>().where((tag) => !visited.contains(tag)).toList();
 }

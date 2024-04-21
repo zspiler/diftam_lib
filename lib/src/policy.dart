@@ -64,4 +64,25 @@ class Policy {
 
     return errors;
   }
+
+  List<Node> getOutNeighbours(Node node, [EdgeType? edgeType]) {
+    return edges
+        .where((edge) => (edgeType == null || edge.type == edgeType) && edge.source == node)
+        .map((edge) => edge.target)
+        .toList();
+  }
+
+  List<Node> getInNeighbours(Node node, [EdgeType? edgeType]) {
+    return edges
+        .where((edge) => (edgeType == null || edge.type == edgeType) && edge.target == node)
+        .map((edge) => edge.source)
+        .toList();
+  }
+
+  List<Node> getNeighbours(Node node, [EdgeType? edgeType]) {
+    return [
+      ...getOutNeighbours(node, edgeType),
+      ...getInNeighbours(node, edgeType),
+    ];
+  }
 }
