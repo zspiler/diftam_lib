@@ -61,7 +61,7 @@ List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
     visited.add(node);
     path.add(node);
 
-    for (var neighbour in policy.getOutNeighbours(node)) {
+    for (var neighbour in policy.getOutNeighbours(node, edgeType)) {
       parentMap[neighbour] = node;
       dfs(neighbour, List<Node>.from(path));
     }
