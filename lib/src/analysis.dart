@@ -1,25 +1,25 @@
 import 'policy.dart';
 
-typedef GraphComponent = List<Node>;
+typedef GraphComponent = List<TagNode>;
 
 List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
   final Set<Node> visited = {};
 
-  void dfs(Node node, List<Node> component) {
+  void dfs(TagNode node, List<TagNode> component) {
     if (visited.contains(node)) {
       return;
     }
     visited.add(node);
     component.add(node);
-    for (var neighbour in policy.getNeighbours(node, edgeType)) {
+    for (var neighbour in policy.getNeighbours(node, edgeType).whereType<TagNode>()) {
       dfs(neighbour, component);
     }
   }
 
-  final List<List<Node>> components = [];
-  for (var node in policy.nodes) {
+  final List<List<TagNode>> components = [];
+  for (var node in policy.nodes.whereType<TagNode>()) {
     if (!visited.contains(node)) {
-      List<Node> component = [];
+      List<TagNode> component = [];
       dfs(node, component);
       components.add(component);
     }
