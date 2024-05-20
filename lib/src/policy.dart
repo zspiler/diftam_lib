@@ -48,18 +48,16 @@ class Policy {
   static List<String> validateEdges(List<Edge> edges) {
     final List<String> errors = [];
 
-    final Map<Node, int> numOfEdgesPerNode = {};
-
-    for (var edge in edges) {
-      if (edge.source is BoundaryNode) {
-        numOfEdgesPerNode[edge.source] = (numOfEdgesPerNode[edge.source] ?? 0) + 1;
-      } else if (edge.target is BoundaryNode) {
-        numOfEdgesPerNode[edge.target] = (numOfEdgesPerNode[edge.target] ?? 0) + 1;
+    final numOfEdgesPerEntryNode = edges.fold<Map<EntryNode, int>>({}, (map, edge) {
+      if (edge.source is EntryNode) {
+        final entryNode = edge.source as EntryNode;
+        map[entryNode] = (map[entryNode] ?? 0) + 1;
       }
-    }
+      return map;
+    });
 
-    if (numOfEdgesPerNode.values.any((numOfEdges) => numOfEdges > 1)) {
-      errors.add("An 'Entry' or 'Exit' node can only have one outgoing/incoming edge!");
+    if (numOfEdgesPerEntryNode.values.any((numOfEdges) => numOfEdges > 1)) {
+      errors.add("An 'Entry' node can only have one outgoing edge!");
     }
 
     return errors;
