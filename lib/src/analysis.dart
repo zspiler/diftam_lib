@@ -29,49 +29,31 @@ List<GraphComponent> findComponents(Policy policy, EdgeType edgeType) {
 }
 
 List<List<Node>> findCycles(Policy policy, EdgeType edgeType) {
-  final List<List<Node>> cycles = [];
-  final Map<Node, Node> parentMap = {};
   final Set<Node> visited = {};
-  final Set<Node> finished = {};
+  final List<Node> path = [];
+  final List<List<Node>> cycles = [];
 
-  void dfs(Node node, List<Node> path) {
-    if (visited.contains(node)) {
-      if (!finished.contains(node)) {
-        Node? current = node;
-        List<Node> cycle = [current];
-
-        while (true) {
-          current = parentMap[current] != current ? parentMap[current] : null;
-          if (current == null || current == node) {
-            break;
-          }
-          cycle.add(current);
-        }
-
-        cycle.add(node);
-        cycles.add(cycle.reversed.toList());
-      }
-      return;
-    }
-
-    if (finished.contains(node)) {
-      return;
-    }
-
+  void dfs(Node node) {
     visited.add(node);
     path.add(node);
 
     for (var neighbour in policy.getOutNeighbours(node, edgeType)) {
-      parentMap[neighbour] = node;
-      dfs(neighbour, List<Node>.from(path));
+      if (path.contains(neighbour)) {
+        final cycle =
+            path.sublist(path.indexOf(neighbour)); // neighbour already in path! Cycle is from previous occurance to end..
+        cycles.add(cycle);
+      } else if (!visited.contains(neighbour)) {
+        dfs(neighbour);
+      }
     }
 
     path.remove(node);
-    finished.add(node);
   }
 
   for (var node in policy.nodes) {
-    dfs(node, []);
+    if (!visited.contains(node)) {
+      dfs(node);
+    }
   }
 
   return cycles;
