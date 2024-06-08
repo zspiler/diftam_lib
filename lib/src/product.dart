@@ -1,4 +1,7 @@
 import 'policy.dart';
+import 'node.dart';
+import 'edge.dart';
+import 'utils.dart';
 
 typedef _CombinedNode = ({Node parent1, Node parent2, NodeType type});
 typedef _CombinedEdge = ({_CombinedNode source, _CombinedNode destination, EdgeType type});
@@ -53,25 +56,20 @@ Policy cartesianProduct(Policy policy1, Policy policy2) {
   List<_CombinedEdge> combineEdges(List<Edge> edges, List<_CombinedNode> combinedNodes, {bool compareFirstComponent = true}) {
     List<_CombinedEdge> combinedEdges = [];
     for (var edge in edges) {
-      for (var combinedNode1 in combinedNodes) {
-        for (var combinedNode2 in combinedNodes) {
-          if (compareFirstComponent) {
-            if (combinedNode1.parent2 != combinedNode2.parent2) {
-              continue;
-            }
-          } else {
-            if (combinedNode1.parent1 != combinedNode2.parent1) {
-              continue;
-            }
+      for (var node1 in combinedNodes) {
+        for (var node2 in combinedNodes) {
+          if ((compareFirstComponent && node1.parent2 != node2.parent2) ||
+              !compareFirstComponent && node1.parent1 != node2.parent1) {
+            continue;
           }
 
-          final comparedComponent1 = compareFirstComponent ? combinedNode1.parent1 : combinedNode1.parent2;
-          final comparedComponent2 = compareFirstComponent ? combinedNode2.parent1 : combinedNode2.parent2;
+          final node1Parent = compareFirstComponent ? node1.parent1 : node1.parent2;
+          final node2Parent = compareFirstComponent ? node2.parent1 : node2.parent2;
 
-          if (edge.source == comparedComponent1 && edge.target == comparedComponent2) {
-            combinedEdges.add((source: combinedNode1, destination: combinedNode2, type: edge.type));
-          } else if (edge.source == comparedComponent2 && edge.target == comparedComponent1) {
-            combinedEdges.add((source: combinedNode2, destination: combinedNode1, type: edge.type));
+          if (edge.source == node1Parent && edge.target == node2Parent) {
+            combinedEdges.add((source: node1, destination: node2, type: edge.type));
+          } else if (edge.source == node2Parent && edge.target == node1Parent) {
+            combinedEdges.add((source: node2, destination: node1, type: edge.type));
           }
         }
       }

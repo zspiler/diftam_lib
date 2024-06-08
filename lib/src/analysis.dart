@@ -1,4 +1,6 @@
 import 'policy.dart';
+import 'node.dart';
+import 'edge.dart';
 
 typedef GraphComponent = List<TagNode>;
 
