@@ -1,3 +1,4 @@
+import 'exceptions.dart';
 import 'node.dart';
 import 'edge.dart';
 
@@ -6,9 +7,14 @@ class Policy {
   late final List<Node> nodes;
   late final List<Edge> edges;
 
-  Policy({required this.name, List<Node>? nodes, List<Edge>? edges})
-      : nodes = nodes ?? [],
-        edges = edges ?? [];
+  Policy({
+    required this.name,
+    List<Node>? nodes,
+    List<Edge>? edges,
+  })  : nodes = nodes ?? [],
+        edges = edges ?? [] {
+    _validate(this.nodes, this.edges);
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -35,6 +41,15 @@ class Policy {
       throw ArgumentError('Unknown node type: ${node['type']}');
     }).toList();
     edges = json['edges'].map<Edge>((edge) => Edge.fromJson(edge, nodes)).toList();
+
+    _validate(nodes, edges);
+  }
+
+  static void _validate(List<Node> nodes, List<Edge> edges) {
+    final edgeValidationErrors = validateEdges(edges);
+    if (edgeValidationErrors.isNotEmpty) {
+      throw PolicyValidationException(edgeValidationErrors.join('\n'));
+    }
   }
 
   static List<String> validateEdges(List<Edge> edges) {
@@ -49,7 +64,7 @@ class Policy {
     });
 
     if (numOfEdgesPerEntryNode.values.any((numOfEdges) => numOfEdges > 1)) {
-      errors.add("An 'Entry' node can only have one outgoing edge!");
+      errors.add("An 'Entry' node can only have one outgoing edge.");
     }
 
     return errors;
