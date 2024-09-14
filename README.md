@@ -7,11 +7,11 @@ The library is used in `D2SC-editor` which is a Flutter app for visualizing and 
 
 ## TLDR
 
-`policy.dart` - `Policy` class which represents a D2SC security policy.
-`edge.dart` - `Edge` class (threre are 3 types of edges)
-`node.dart` - node classes (there are 3 types of nodes)
-`analysis.dart` - functions for analyzing a single policy / graph (eg. finding cycles)
-`product.dart` - functions for combining policies 
+- `policy.dart` ~ `Policy` class which represents a D2SC security policy. 
+- `edge.dart` ~ `Edge` class (threre are 3 types of edges) 
+- `node.dart` ~ node classes (there are 3 types of nodes) 
+- `analysis.dart` ~ functions for analyzing a single policy / graph (eg. finding cycles)
+- `product.dart` ~ functions for combining policies 
 
 
 ## Example
