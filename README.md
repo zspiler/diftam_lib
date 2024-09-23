@@ -1,4 +1,4 @@
-# DIFTAM Policy
+# diftam_lib
 
 A simple Dart library for creating and managing DIFTAM security policies,
 which are essentially directed graphs.
