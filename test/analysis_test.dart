@@ -1,4 +1,4 @@
-import 'package:d2sc_policy/d2sc_policy.dart';
+import 'package:diftam_lib/diftam_lib.dart';
 import 'package:test/test.dart';
 
 void main() {

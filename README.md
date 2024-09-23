@@ -1,13 +1,13 @@
-# D2SC Policy
+# DIFTAM Policy
 
-A simple Dart library for creating and managing D2SC security policies,
+A simple Dart library for creating and managing DIFTAM security policies,
 which are essentially directed graphs.
 
-The library is used in `D2SC-editor` which is a Flutter app for visualizing and editing D2SC security policies.
+The library is used in `diftam_editor` which is a Flutter app for visualizing and editing DIFTAM security policies.
 
 ## TLDR
 
-- `policy.dart` ~ `Policy` class which represents a D2SC security policy. 
+- `policy.dart` ~ `Policy` class which represents a security policy. 
 - `edge.dart` ~ `Edge` class (threre are 3 types of edges) 
 - `node.dart` ~ node classes (there are 3 types of nodes) 
 - `analysis.dart` ~ functions for analyzing a single policy / graph (eg. finding cycles)
