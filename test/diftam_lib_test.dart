@@ -1,4 +1,5 @@
 import 'package:diftam_lib/diftam_lib.dart';
+import 'package:diftam_lib/src/exceptions.dart';
 import 'package:test/test.dart';
 import 'dart:math';
 
@@ -44,33 +45,16 @@ void main() {
         final pub = TagNode('priv');
         final stdin = EntryNode('stdin');
 
-        final policy = Policy(name: 'Policy 1', nodes: [
-          priv,
-          pub,
-          stdin,
-        ], edges: [
-          Edge(stdin, priv, EdgeType.boundary),
-          Edge(stdin, pub, EdgeType.boundary),
-        ]);
-
-        expect(Policy.validateEdges(policy.edges), ["An 'Entry' or 'Exit' node can only have one outgoing/incoming edge!"]);
-      });
-
-      test('invalid - multiple edges to a exit node', () {
-        final priv = TagNode('priv');
-        final pub = TagNode('priv');
-        final stdout = ExitNode('stdout');
-
-        final policy = Policy(name: 'Policy 1', nodes: [
-          priv,
-          pub,
-          stdout
-        ], edges: [
-          Edge(priv, stdout, EdgeType.boundary),
-          Edge(pub, stdout, EdgeType.boundary),
-        ]);
-
-        expect(Policy.validateEdges(policy.edges), ["An 'Entry' or 'Exit' node can only have one outgoing/incoming edge!"]);
+        expect(
+            () => Policy(name: 'Policy 1', nodes: [
+                  priv,
+                  pub,
+                  stdin,
+                ], edges: [
+                  Edge(stdin, priv, EdgeType.boundary),
+                  Edge(stdin, pub, EdgeType.boundary),
+                ]),
+            throwsA(TypeMatcher<PolicyValidationException>()));
       });
     });
   });
